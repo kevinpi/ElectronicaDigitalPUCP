@@ -1,0 +1,56 @@
+;******************************************************************************
+; Descripción: Programa para encender leds del módulo de E/S y comandar el motor DC 
+;	          por medio de la matriz de pulsadores.
+;	          Los leds se encienden mientras los pulsadores son presionados.
+;	          El motor no se mueve mientras los pulsadores no se presionen.
+;	          Si se dejan de presionar se apaga.
+; Autor: Kevin Acuña
+; Semestre: 2017 II
+;******************************************************************************
+
+;******************** Declaración de puertos ***********************************
+DDRA EQU $01
+PORTA EQU $00
+DDRG EQU $03
+PORTG EQU $02
+; ********************* Programa Principal ***********************************
+ 		ORG $0500
+; Configuración de puertos
+ 		LDAA #$FF
+ 		STAA DDRA ; Puerto A como Salida
+ 		LDAA #$00
+		STAA DDRG ; Puerto G como Entrada
+		LDAA #$00
+		STAA PORTA ; Inicializa salida del puerto A a bajo
+Lectura
+ 		LDAA PORTG ; Lee el puerto G
+ 		ANDA #$04   ; Aisla el bit 3
+		CMPA #$04   ; Compara si está presionado
+		BEQ LED1      ; Si está presionado salta a LED 1
+
+                	LDAA PORTG
+ 		ANDA #$02
+		CMPA #$02
+		BEQ LED2
+		
+		LDAA PORTG
+ 		ANDA #$01
+		CMPA #$01
+		BEQ LED3		
+APAGADO 			; Si no se ha presionado ningun pulsador
+				; se ponen todas las salidas a cero.
+		LDAA #$00
+		STAA PORTA
+		BRA Lectura
+LED1
+		LDAA #$55   
+		STAA PORTA       ; Enciende el LED 1 
+		BRA Lectura
+LED2
+		LDAA #$77
+		STAA PORTA         ; Enciende el LED 2
+		BRA Lectura
+LED3
+		LDAA #$99
+		STAA PORTA        ; Enciende el LED 3
+		BRA Lectura
