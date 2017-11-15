@@ -1,0 +1,49 @@
+;******************************************************************************
+; Descripción: Programa que determina que al presionar el interruptor conectado a
+; al bit PA2, se prenden los diodos leds en PG0 y PG1
+; Autor: Zenón Cucho Mendoza
+; Semestre: 2016.I
+;*******************************************************************************
+
+;******************** Declaración de puertos ***********************************
+DDRA EQU $01
+PORTA EQU $00
+DDRG EQU $03
+PORTG EQU $02
+AUX EQU $05
+
+; ********************* Programa Principal ***********************************
+	ORG $0500
+; Configuración de puertos
+	LDAA #$FF  ; puerto A de salida
+	STAA DDRA
+	LDAA #$00  ; puerto G de entrada
+	STAA DDRG
+	CLR PORTA
+Lectura
+	LDAA PORTG ; lectura del puerto G (se lee los 8 bits)
+	STAA AUX
+	ANDA #$01 ; Filtramos solo el bit 1, que nos interesa
+	CMPA #1     ; analizo si han presionado la matriz de pulsadores
+	BEQ VELOCIDAD1 ; si está presionado, prendo leds y envio velocidad 1
+	LDAA AUX
+	ANDA #$02 ; Filtramos solo el bit 2, que nos interesa
+	CMPA #2     ; analizo si han presionado la matriz de pulsadores
+	BEQ VELOCIDAD2 ; si está presionado, prendo leds y envio velocidad 2
+	LDAA AUX
+	ANDA #$04 ; Filtramos solo el bit 3, que nos interesa
+	CMPA #4
+	BEQ VELOCIDAD3
+	BRA Lectura ; repite el sondeo
+VELOCIDAD1
+	LDAA #$00 ; Envio un 0000 para los leds y 0000 para el motor ( 0 - significa 0%)
+	STAA PORTA
+	BRA Lectura ;repite el sondeo
+VELOCIDAD2
+	LDAA #$55 ; Envio un 0101 para los leds y 0101 para el motor ( 5 - significa 50%)
+	STAA PORTA
+	BRA Lectura ;repite el sondeo
+VELOCIDAD3
+	LDAA #$99 ; Envio un 1001 para los leds y 1001 para el motor ( 9 - significa 90%)
+	STAA PORTA
+	BRA Lectura ;repite el sondeo
