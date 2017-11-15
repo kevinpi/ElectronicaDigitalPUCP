@@ -1,8 +1,8 @@
 ;******************************************************************************
-; Descripción: Programa que determina que al presionar el interruptor conectado a
-; al bit PA2, se prenden los diodos leds en PG0 y PG1
-; Autor: Zenón Cucho Mendoza
-; Semestre: 2016.I
+; Descripción: Programa que comanda el Módulo de Motor DC por medio de una
+;              matriz de pulsadores
+; Autor: Kevin Acuña
+; Semestre: 2017.II
 ;*******************************************************************************
 
 ;******************** Declaración de puertos ***********************************
